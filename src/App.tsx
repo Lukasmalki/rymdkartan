@@ -3,7 +3,7 @@ import { PLANETS } from "./data/planets";
 import { Planet } from "./components/Planet"
 import { useState, Suspense } from "react";
 import { OrbitControls } from "@react-three/drei";
-
+import { InfoPanel } from "./components/InfoPanel";
 
 export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -20,11 +20,7 @@ export default function App() {
         </Suspense>
         <OrbitControls />
       </Canvas>
-      {selected && (
-        <p style={{ position: "absolute", top: 20, left: 20, color: "white" }}>
-          {selected.name}
-        </p>
-      )}
+      <InfoPanel planet={selected} onClose={() => setSelectedId(null)} />
     </>
   );
 }
