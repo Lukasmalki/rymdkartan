@@ -1,37 +1,26 @@
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef } from "react";
-import type { Mesh } from "three"
-import { MathUtils } from "three";
-import { useTexture } from "@react-three/drei";
-import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { PLANETS } from "./data/planets";
+import { Planet } from "./components/Planet"
+import { useState, Suspense } from "react";
 import { OrbitControls } from "@react-three/drei";
-
-function Earth() {
-  const ref = useRef<Mesh>(null);
-  const texture = useTexture("/textures/earth.jpg")
-
-  useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.y += delta * 0.5
-  });
-
-  return (
-    <group rotation-z={MathUtils.degToRad(23.4)}>
-      <mesh ref={ref}>
-        <sphereGeometry args={[1, 64, 32]} />
-        <meshStandardMaterial map={texture} />
-      </mesh>
-    </group>
-  );
-}
+import { InfoPanel } from "./components/InfoPanel";
 
 export default function App() {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selected = PLANETS.find((p) => p.id === selectedId) ?? null;
   return (
-    <Canvas camera={{ position: [0, 0, 4] }}>
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[5, 0, 5]} intensity={2} />
-      <Suspense fallback={null}>
-        <Earth />
-      </Suspense>
-    </Canvas>
-  )
+    <>
+      <Canvas camera={{ position: [0, 20, 45] }}>
+        <ambientLight intensity={0.35} />
+        <pointLight position={[0, 0, 0]} intensity={200} decay={2} />
+        <Suspense fallback={null}>
+          {PLANETS.map((p) => (
+            <Planet key={p.id} data={p} onSelect={setSelectedId} />
+          ))}
+        </Suspense>
+        <OrbitControls />
+      </Canvas>
+      <InfoPanel planet={selected} onClose={() => setSelectedId(null)} />
+    </>
+  );
 }
