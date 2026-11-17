@@ -54,3 +54,13 @@ body,
   font-size: 0.8rem;
   color: #9aa3c7;
 }
+
+.surface-label {
+  color: #ffc23d;
+  font:
+    700 0.8rem system-ui,
+    sans-serif;
+  white-space: nowrap;
+  text-shadow: 0 1px 6px #000;
+  pointer-events: none;
+}
