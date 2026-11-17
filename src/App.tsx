@@ -8,11 +8,15 @@ import { InfoPanel } from "./components/InfoPanel";
 import { Sun } from "./components/Sun";
 import { OrbitRing } from "./components/OrbitRing";
 import { CameraRig } from "./components/CameraRig";
+import { SEASONS_MISSION } from "./data/missions";
+import { MissionPanel } from "./components/MissionPanel";
 
 export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = PLANETS.find((p) => p.id === selectedId) ?? null;
   const controls = useRef<OrbitControlsImpl>(null);
+  const [missionStep, setMissionStep] = useState<number | null>(null);
+  const inMission = missionStep !== null;
 
   return (
     <>
@@ -41,6 +45,37 @@ export default function App() {
         />{" "}
       </Canvas>
       <InfoPanel planet={selected} onClose={() => setSelectedId(null)} />
+      {!inMission && (
+        <button
+          className="start-mission"
+          onClick={() => {
+            setSelectedId(null);
+            setMissionStep(0);
+          }}
+        >
+          Starta uppdrag: {SEASONS_MISSION.title}
+          <small>{SEASONS_MISSION.subtitle}</small>
+        </button>
+      )}
+
+      {inMission && (
+        <MissionPanel
+          mission={SEASONS_MISSION}
+          stepIndex={missionStep}
+          canGoNext={true}
+          onBack={() => setMissionStep((s) => Math.max(0, (s ?? 0) - 1))}
+          onNext={() =>
+            setMissionStep((s) =>
+              (s ?? 0) === SEASONS_MISSION.steps.length - 1
+                ? null
+                : (s ?? 0) + 1,
+            )
+          }
+          onExit={() => setMissionStep(null)}
+        >
+          <p>Innehåll för steg {missionStep + 1} kommer här.</p>
+        </MissionPanel>
+      )}
     </>
   );
 }
