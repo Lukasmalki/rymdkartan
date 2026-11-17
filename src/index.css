@@ -1,1 +1,30 @@
-html, body, #root { margin: 0; height: 100%; background: #070B1F; }
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  background: #070b1f;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.planet-label {
+  background: none;
+  border: 0;
+  color: #eef1ff;
+  font:
+    600 0.9rem system-ui,
+    sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+  opacity: 0.85;
+}
+.planet-label:hover {
+  color: #ffc23d;
+  opacity: 1;
+}
